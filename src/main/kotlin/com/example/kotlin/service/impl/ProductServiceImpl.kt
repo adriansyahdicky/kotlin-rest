@@ -3,13 +3,17 @@ package com.example.kotlin.service.impl
 import com.example.kotlin.entity.Product
 import com.example.kotlin.exception.NotFoundException
 import com.example.kotlin.model.CreateProductRequest
+import com.example.kotlin.model.ListProductRequest
 import com.example.kotlin.model.ProductResponse
 import com.example.kotlin.model.UpdateProductRequest
 import com.example.kotlin.repository.ProductRepository
 import com.example.kotlin.service.ProductService
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.util.stream.Collector
+import java.util.stream.Collectors
 
 @Service
 class ProductServiceImpl(val productRepository: ProductRepository) : ProductService{
@@ -57,9 +61,10 @@ class ProductServiceImpl(val productRepository: ProductRepository) : ProductServ
         return true
     }
 
-    override fun getAll(): MutableList<Product> {
-        val product = productRepository.findAll()
-        return product
+    override fun list(listProductRequest: ListProductRequest): List<ProductResponse> {
+        val page = productRepository.findAll(PageRequest.of(listProductRequest.page!!, listProductRequest.size!!))
+        val products: List<Product> = page.get().collect(Collectors.toList())
+        return products.map { product -> convertProductResponse(product) }
     }
 
 

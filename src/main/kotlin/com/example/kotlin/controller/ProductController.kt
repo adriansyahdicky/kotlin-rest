@@ -1,10 +1,6 @@
 package com.example.kotlin.controller
 
-import com.example.kotlin.entity.Product
-import com.example.kotlin.model.CreateProductRequest
-import com.example.kotlin.model.ProductResponse
-import com.example.kotlin.model.UpdateProductRequest
-import com.example.kotlin.model.WebResponse
+import com.example.kotlin.model.*
 import com.example.kotlin.service.ProductService
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -62,8 +58,10 @@ class ProductController(val productService: ProductService){
 
     @GetMapping(value = ["/api/products"],
             produces = ["application/json"])
-    fun getProducts() : WebResponse<MutableList<Product>>{
-        val productResponse =  productService.getAll()
+    fun listProducts(@RequestParam("size", defaultValue = "10") size: Int,
+                     @RequestParam("page", defaultValue = "0") page: Int) : WebResponse<List<ProductResponse>>{
+        val request = ListProductRequest(page, size)
+        val productResponse =  productService.list(request)
         return WebResponse(
                 code = 200,
                 status = "OK",
