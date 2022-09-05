@@ -9,10 +9,10 @@ import javax.persistence.Table
 @Table(name = "products")
 data class Product(
     @Id
-    val id: String,
-    val name: String,
-    val price: Long,
-    val quantity: Int,
-    val createdDate: LocalDate,
-    val updatedDate: LocalDate?
+    var id: String,
+    var name: String,
+    var price: Long,
+    var quantity: Int,
+    var createdDate: LocalDate,
+    var updatedDate: LocalDate?
 )

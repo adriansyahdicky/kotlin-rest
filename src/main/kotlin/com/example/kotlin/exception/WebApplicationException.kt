@@ -24,4 +24,13 @@ class WebApplicationException {
         )
     }
 
+    @ExceptionHandler(value = [NotFoundException::class])
+    fun validationNotFound(ex: NotFoundException) : WebResponse<String>{
+        return WebResponse(
+                code = 404,
+                status = "NOT FOUND",
+                data = "Not Found"
+        )
+    }
+
 }
